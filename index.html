@@ -3,23 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banjir Dashboard</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Malaysia Disaster Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 </head>
 <body>
-    <div class="dashboard">
-        <h1>Banjir Dashboard</h1>
-        <div class="stats-container">
-            <div id="totalPPS"></div>
-            <div id="totalMangsa"></div>
-            <div id="totalKeluarga"></div>
-        </div>
-        <div class="charts">
-            <div id="barChart"></div>
-            <div id="pieChart"></div>
-        </div>
+    <div id="dashboard-container">
+        <header>
+            <h1>Malaysia Disaster Dashboard</h1>
+        </header>
+
+        <main>
+            <!-- Map Section -->
+            <div id="map-container">
+                <h2>Map of Flood Relief Centers</h2>
+                <div id="map"></div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard">
+                <h2>Flood Relief Data Overview</h2>
+                <div id="stats">
+                    <!-- Dynamic stats content will be rendered here -->
+                </div>
+                <div id="table-container">
+                    <table id="data-table">
+                        <thead>
+                            <tr>
+                                <th>Pusat Pemindahan</th>
+                                <th>Negeri</th>
+                                <th>Jumlah Mangsa</th>
+                                <th>Jumlah Keluarga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic table content will be rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
+
     <script src="dashboard.js"></script>
+    <script src="map.js"></script>
 </body>
 </html>
