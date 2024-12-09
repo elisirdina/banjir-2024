@@ -1,40 +1,36 @@
 // API URL
-const apiUrl = 'https://infobencanajkmv2.jkm.gov.my/api/data-dashboard-table-pps.php?a=0&b=0&seasonmain_id=208&seasonnegeri_id=';
+const originalApiUrl = 'https://infobencanajkmv2.jkm.gov.my/api/data-dashboard-table-pps.php?a=0&b=0&seasonmain_id=208&seasonnegeri_id=';
+const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(originalApiUrl)}`;
 
 // Fetch data from API
 async function fetchData() {
     try {
-        // First, let's log the attempt to fetch
         console.log('Attempting to fetch data from:', apiUrl);
 
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
-        
+        const response = await fetch(apiUrl);
         console.log('Response received:', response);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const text = await response.text(); // Get raw text first
-        console.log('Raw response:', text);
+        const proxyResponse = await response.json();
+        console.log('Proxy response:', proxyResponse);
 
+        if (!proxyResponse.contents) {
+            throw new Error('No data in proxy response');
+        }
+
+        // Parse the contents from the proxy
         let data;
         try {
-            data = JSON.parse(text);
+            data = JSON.parse(proxyResponse.contents);
+            console.log('Parsed data:', data);
         } catch (parseError) {
             console.error('JSON Parse Error:', parseError);
             throw new Error('Failed to parse JSON response');
         }
 
-        console.log('Parsed data:', data);
-
-        // Check if data is in the expected format
         if (!data) {
             throw new Error('No data received from API');
         }
@@ -47,7 +43,6 @@ async function fetchData() {
             stack: error.stack
         });
         
-        // Display error message on the dashboard
         document.querySelector('.stats-container').innerHTML = `
             <div class="error-message">
                 <h3>Error Loading Data</h3>
