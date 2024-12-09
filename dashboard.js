@@ -4,17 +4,47 @@ const apiUrl = 'https://infobencanajkmv2.jkm.gov.my/api/data-dashboard-table-pps
 // Fetch data from API
 async function fetchData() {
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        console.log('Response status:', response.status);
         const data = await response.json();
+        console.log('Fetched data:', data);
         return data;
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error details:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+        });
+        
+        // Display error message on the dashboard
+        document.querySelector('.stats-container').innerHTML = `
+            <div class="error-message">
+                <h3>Error Loading Data</h3>
+                <p>Unable to fetch data from the API. Please check the console for more details.</p>
+            </div>
+        `;
         return null;
     }
 }
 
-// Update statistics
+// Update statistics with error handling
 function updateStats(data) {
+    if (!data || !Array.isArray(data)) {
+        console.error('Invalid data format:', data);
+        return;
+    }
+
     const totalPPS = d3.sum(data, d => 1);
     const totalMangsa = d3.sum(data, d => parseInt(d.JUMLAH_MANGSA) || 0);
     const totalKeluarga = d3.sum(data, d => parseInt(d.JUMLAH_KELUARGA) || 0);
